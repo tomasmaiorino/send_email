@@ -7,7 +7,7 @@ class CreateEMessages < ActiveRecord::Migration
      t.string :sender_name
      t.string :sender_email
      t.string :token
-     t.booelan :async, :default => false
+     t.boolean :async, :default => false
      t.boolean :valid, :default => false
      t.timestamps null: false
     end
