@@ -17,7 +17,10 @@ class BaseApiController < ApplicationController
          end
        end
 =end
-       def parse_request
-         @json = JSON.parse(request.body.read)
-       end
+      def parse_request
+        Rails.logger.debug "Request body #{request.body.read}"
+        if !request.body.read.nil? && !request.body.read.empty?
+          @json = JSON.parse(request.body.read)
+        end
+      end
 end
