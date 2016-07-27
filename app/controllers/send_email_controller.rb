@@ -4,12 +4,9 @@ require 'json'
 class SendEmailController < BaseApiController
 
 	def handle_unverified_request
-		
-		Rails.logger.debug '+++++++++++++++++Request #{request.method}'
-
-	#	if !@json.has_key?('message') && !@json['message']['api_token']
-     #  		raise ActionController::InvalidAuthenticityToken
-      # 	end
+		if request.method == 'POST' && !JSON.parse(request.body.read).has_key?("token")
+       		raise ActionController::InvalidAuthenticityToken
+       	end
     end
 
 	def send_email
