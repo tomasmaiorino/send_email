@@ -4,6 +4,9 @@ require 'json'
 class SendEmailController < BaseApiController
 
 	def handle_unverified_request
+		
+		Rails.logger.debug '+++++++++++++++++Request #{request.method}'
+
 	#	if !@json.has_key?('message') && !@json['message']['api_token']
      #  		raise ActionController::InvalidAuthenticityToken
       # 	end
@@ -15,11 +18,16 @@ class SendEmailController < BaseApiController
 			return render nothing: true, status: :bad_request
 		end
 
-		Rails.logger.debug "EMessage #{@json}"
+		Rails.logger.debug "EMessage #{@json.to_s}"
 		message = JSON.parse( @json.to_json, object_class: EMessage)
 		Rails.logger.debug "EMessage #{message}"
 		if !message.valid?
    			return render json: message.errors.to_json, status: :bad_request
    		end
+   		Rails.logger.debug "[EMessage] -> saving e_message."
+   		#message.save()
+   		Rails.logger.info "[EMessage] -> sending email."
+
+   		return render json: Response.new('success', 200), status: :ok
   	end
 end
