@@ -11,7 +11,26 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160722174126) do
+ActiveRecord::Schema.define(version: 20160727115019) do
+
+  create_table "client_senders", force: :cascade do |t|
+    t.integer  "client_id",  limit: 4
+    t.integer  "sender_id",  limit: 4
+    t.datetime "created_at",           null: false
+    t.datetime "updated_at",           null: false
+  end
+
+  add_index "client_senders", ["client_id"], name: "index_client_senders_on_client_id", using: :btree
+  add_index "client_senders", ["sender_id"], name: "index_client_senders_on_sender_id", using: :btree
+
+  create_table "clients", force: :cascade do |t|
+    t.string   "name",       limit: 255
+    t.string   "token",      limit: 255
+    t.boolean  "active",                 default: false
+    t.datetime "created_at",                             null: false
+    t.datetime "updated_at",                             null: false
+    t.string   "host",       limit: 255
+  end
 
   create_table "e_messages", force: :cascade do |t|
     t.string   "message",          limit: 255
@@ -25,15 +44,24 @@ ActiveRecord::Schema.define(version: 20160722174126) do
     t.datetime "updated_at",                                   null: false
   end
 
-  create_table "sent_e_messages", force: :cascade do |t|
+  create_table "senders", force: :cascade do |t|
     t.string   "name",         limit: 255
     t.boolean  "active",                   default: false
     t.string   "sender_class", limit: 255
-    t.integer  "emessage_id",  limit: 4
     t.datetime "created_at",                               null: false
     t.datetime "updated_at",                               null: false
   end
 
+  create_table "sent_e_messages", force: :cascade do |t|
+    t.string   "status",      limit: 255
+    t.datetime "created_at",              null: false
+    t.datetime "updated_at",              null: false
+    t.integer  "emessage_id", limit: 4
+    t.integer  "sender_id",   limit: 4
+    t.string   "message",     limit: 255
+  end
+
   add_index "sent_e_messages", ["emessage_id"], name: "index_sent_e_messages_on_emessage_id", using: :btree
+  add_index "sent_e_messages", ["sender_id"], name: "index_sent_e_messages_on_sender_id", using: :btree
 
 end
