@@ -97,4 +97,16 @@ class SendEmailControllerTest < ActionController::TestCase
     assert_equal ConstClass::SUCCESS.keys[0], message['code'].to_i
   end
 
+  test "should save message" do
+    create_temp_client.save
+    @request.host = 'localhost'
+    post :send_email, @valid_params.to_json, {'ACCEPT' => "application/json", 'CONTENT_TYPE' => 'application/json'}
+    assert_response :ok
+    message = response.body
+    message = JSON.parse(message)    
+    assert message.has_key?("message")
+    assert_equal 'success', message['message'] 
+    assert_equal ConstClass::SUCCESS.keys[0], message['code'].to_i
+  end
+
 end

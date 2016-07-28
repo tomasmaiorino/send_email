@@ -4,6 +4,7 @@ class CreateSenders < ActiveRecord::Migration
  	  t.string :name
       t.boolean :active, :default => false
       t.string :sender_class
+      t.string :additional_data
       t.timestamps null: false
     end
   end
