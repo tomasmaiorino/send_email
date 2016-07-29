@@ -43,4 +43,16 @@ class EMessageTest < ActiveSupport::TestCase
   	assert_equal 'sender_email@test.com', EMessage.find_by(sender_email: 'sender_email@test.com').sender_email
   end
 
+  test "send_message" do
+  
+  key = ENV["MAILGUN_KEY"]
+  domain_name = ENV['MAILGUN_DOMAIN_NAME']
+
+  RestClient.post "https://api:#{key}"\
+  "@api.mailgun.net/v3/#{domain_name}/messages",
+  :from => "Excited User <mailgun@#{domain_name}>",
+  :to => "tomasmaiorino@gmail.com",
+  :subject => "Hello",
+  :text => "Testing some Mailgun awesomness!"
+  end
 end
