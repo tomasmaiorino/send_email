@@ -18,6 +18,14 @@ class SendEmailControllerTest < ActionController::TestCase
     return client
   end
 
+  def create_temp_mailgun_sender
+    sender = Sender.new
+    sender.additional_data = ENV["MAILGUN_URL"] + "|" + ENV["MAILGUN_KEY"]
+    sender.name = 'Mailgun'
+    sender.active = true
+    sender.sender_class = 'Mailgun'
+    return sender
+  end
 
   test "should return error 400" do
     post :send_email
@@ -98,7 +106,10 @@ class SendEmailControllerTest < ActionController::TestCase
   end
 
   test "should save message" do
+    #init temp
+    create_temp_mailgun_sender.save    
     create_temp_client.save
+
     @request.host = 'localhost'
     post :send_email, @valid_params.to_json, {'ACCEPT' => "application/json", 'CONTENT_TYPE' => 'application/json'}
     assert_response :ok
@@ -107,6 +118,6 @@ class SendEmailControllerTest < ActionController::TestCase
     assert message.has_key?("message")
     assert_equal 'success', message['message'] 
     assert_equal ConstClass::SUCCESS.keys[0], message['code'].to_i
-  end
+ end
 
 end
