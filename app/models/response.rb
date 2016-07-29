@@ -7,4 +7,8 @@ class Response
 		@code = code
 		@result = result
 	end
+
+	def is_success
+		@code == ConstClass::SUCCESS.keys[0]
+	end
 end

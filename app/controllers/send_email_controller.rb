@@ -31,7 +31,6 @@ class SendEmailController < BaseApiController
    		Rails.logger.debug "[EMessage] <- saving e_message."
 
    		# checking token against host
-   		
    		if is_invalid_client(message)
    			return render json: Response.new(ConstClass::INVALID_CLIENT.values[0], ConstClass::INVALID_CLIENT.keys[0]), status: :bad_request
    		end

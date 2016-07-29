@@ -57,6 +57,7 @@ ActiveRecord::Schema.define(version: 20160727115019) do
     t.string   "status",      limit: 255
     t.datetime "created_at",              null: false
     t.datetime "updated_at",              null: false
+    t.datetime "date_sent",               null: true
     t.integer  "emessage_id", limit: 4
     t.integer  "sender_id",   limit: 4
     t.string   "message",     limit: 255

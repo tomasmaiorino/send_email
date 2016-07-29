@@ -13,7 +13,6 @@ class SendEmailControllerTest < ActionController::TestCase
     client.name = 'test'
     client.token = '112211'
     client.active = true
-    #client.registration_date = DateTime.now
     client.host = 'localhost'
     return client
   end
@@ -37,7 +36,7 @@ class SendEmailControllerTest < ActionController::TestCase
     post :send_email, params.to_json, {'ACCEPT' => "application/json", 'CONTENT_TYPE' => 'application/json'}
     assert_response :bad_request
     message = response.body
-    assert_not_nil message
+    assert_not_nil messagecd Doc  
   	message = JSON.parse(message)
   	assert message.has_key?("message")
   	assert message.has_key?("subject")
