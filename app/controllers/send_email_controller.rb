@@ -36,7 +36,7 @@ class SendEmailController < BaseApiController
    		end
    		# send the email
    		Rails.logger.info "[EMessage] -> sending email."
-      send_response = @send_message_service.send_message(message)
+      send_response = @send_message_service.send_service_message(message)
       render json:send_response
       #  return render json: Response.new(ConstClass::SUCCESS.values[0], ConstClass::SUCCESS.keys[0], message.id), status: :ok
   	end

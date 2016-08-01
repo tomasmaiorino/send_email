@@ -54,16 +54,16 @@ ActiveRecord::Schema.define(version: 20160727115019) do
   end
 
   create_table "sent_e_messages", force: :cascade do |t|
-    t.string   "status",      limit: 255
-    t.datetime "created_at",              null: false
-    t.datetime "updated_at",              null: false
-    t.datetime "date_sent",               null: true
-    t.integer  "emessage_id", limit: 4
-    t.integer  "sender_id",   limit: 4
-    t.string   "message",     limit: 255
+    t.string   "status",       limit: 255
+    t.datetime "created_at",               null: false
+    t.datetime "updated_at",               null: false
+    t.datetime "date_sent"
+    t.integer  "e_message_id", limit: 4
+    t.integer  "sender_id",    limit: 4
+    t.string   "message",      limit: 255
   end
 
-  add_index "sent_e_messages", ["emessage_id"], name: "index_sent_e_messages_on_emessage_id", using: :btree
+  add_index "sent_e_messages", ["e_message_id"], name: "index_sent_e_messages_on_emessage_id", using: :btree
   add_index "sent_e_messages", ["sender_id"], name: "index_sent_e_messages_on_sender_id", using: :btree
 
 end

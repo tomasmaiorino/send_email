@@ -11,8 +11,5 @@ class EMessage < ActiveRecord::Base
 	validates :sender_email,  :presence => { :message => "Field Required" }
 	validates :token,  :presence => { :message => "Field Required" }
 
-	
 	has_one :sent_e_message
-
-
 end
