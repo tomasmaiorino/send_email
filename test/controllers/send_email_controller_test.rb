@@ -5,6 +5,32 @@ class SendEmailControllerTest < ActionController::TestCase
   #MyClass.send(:public, :method_name)
   def setup
     @valid_params = {:token => '112211', :message => 'Test Message', :sender_email => 'teste@teste.com', :sender_name => 'test email', :subject => 'subject'}
+    initial_sender_client
+  end
+
+  def initial_sender_client
+  
+    additional_data = ENV["MAILGUN_DOMAIN_NAME"] + '|' + ENV["MAILGUN_KEY"]
+    mailgun = 'Mailgun'
+
+    #setting mailgun initial configuration
+    sender = Sender.find_by(name: mailgun)
+
+    if (sender.nil?)
+      sender = Sender.create([{ :name => 'Mailgun', :active => true, :sender_class => 'Mailgun', :additional_data => additional_data}, :sender_from => 'from@'])
+    end
+
+    client_token = '112211'
+    client = Client.find_by(token: client_token)
+    if (client.nil?)
+      client = Client.create([:token => client_token, :name => 'Test', :active => true, host: 'localhost'])
+    end
+
+    client_sender = ClientSender.find_by(client: client, sender: sender)
+    if (client_sender.nil?)
+      client_sender = ClientSender.create([{client: client.first, sender: sender.first}])
+    end
+  
   end
 
 
@@ -36,7 +62,7 @@ class SendEmailControllerTest < ActionController::TestCase
     post :send_email, params.to_json, {'ACCEPT' => "application/json", 'CONTENT_TYPE' => 'application/json'}
     assert_response :bad_request
     message = response.body
-    assert_not_nil messagecd Doc  
+    assert_not_nil message  
   	message = JSON.parse(message)
   	assert message.has_key?("message")
   	assert message.has_key?("subject")

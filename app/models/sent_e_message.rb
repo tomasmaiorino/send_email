@@ -1,4 +1,4 @@
 class SentEMessage < ActiveRecord::Base
-	has_one :e_message
-	has_one :sender
+	belongs_to :e_message
+	belongs_to :sender
 end

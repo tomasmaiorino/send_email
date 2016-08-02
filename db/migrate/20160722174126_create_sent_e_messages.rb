@@ -3,8 +3,8 @@ class CreateSentEMessages < ActiveRecord::Migration
     create_table :sent_e_messages do |t|
 	  t.string :status
       t.timestamps :date_sent
-      t.belongs_to :e_message, index: true
-      t.belongs_to :sender, index: true
+      t.references :e_message, index: true
+      t.references :sender, index: true
       t.timestamps null: false
       t.string :message
     end

@@ -1,4 +1,4 @@
 class ClientSender < ActiveRecord::Base
-	has_one :sender
-	has_one :client
+	belongs_to :sender
+	belongs_to :client
 end

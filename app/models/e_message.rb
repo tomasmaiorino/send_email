@@ -1,4 +1,6 @@
 class EMessage < ActiveRecord::Base
+
+	attr_accessor :sender_from, :url
 	
 	validates :message,  :length => {
 	    :minimum   => 10,
@@ -12,4 +14,9 @@ class EMessage < ActiveRecord::Base
 	validates :token,  :presence => { :message => "Field Required" }
 
 	has_one :sent_e_message
+
+	def initialize
+		@sender_from = nil
+		@url = nil
+	end
 end

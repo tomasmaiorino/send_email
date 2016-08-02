@@ -10,16 +10,15 @@ class SendEMessageService
 
 		sender_client = ClientSender.find_by(client: client.id)
 
-		Rails.logger.debug "Sender found ? #{!sender.nil?}"
+		Rails.logger.debug "Sender found ? #{!sender_client.nil?}"
 		return create_error_response('sender not found') if sender_client.sender.nil?
 		
 		Rails.logger.debug "Loading sender"
-		sender_class = sender_class.sender_class.classify.safe_constantize.new
+		Rails.logger.info "sender_client.sender #{sender_client.sender}"
+		sender_class = sender_client.sender.sender_class.classify.safe_constantize.new
 		Rails.logger.info "send_message -> #{e_message.id}"
-		response = sender_class.send_message(sender, e_message)
+		response = sender_class.send_message(sender_client.sender, e_message)
 		Rails.logger.info "send_message <- #{e_message.id}"
-		
-		
 	end
 
 	def does_call(e_message, url, sender)
