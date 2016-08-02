@@ -17,31 +17,50 @@ class SendEMessageService
 		Rails.logger.info "sender_client.sender #{sender_client.sender}"
 		sender_class = sender_client.sender.sender_class.classify.safe_constantize.new
 		Rails.logger.info "send_message -> #{e_message.id}"
-		response = sender_class.send_message(sender_client.sender, e_message)
+		response = sender_class.send_message(e_message, sender_client.sender)
 		Rails.logger.info "send_message <- #{e_message.id}"
+		return response
 	end
 
-	def does_call(e_message, url, sender)
-		RestClient.post url,
-  			:from => sender.sender_from,
-  			:to => e_message.sender_email,
-  			:subject => e_message.subject,
-  			:text => e_message.message
+	#tested
+	def create_sent_message(e_message, sender, response, save = false)
+		sent_e_message = SentEMessage.new
+		sent_e_message.status = response.code
+		sent_e_message.e_message = e_message
+		sent_e_message.date_sent =  DateTime.now
+		sent_e_message.sender = sender
+		sent_e_message.message = response.code
+		if save
+			Rails.logger.debug("Saving sent_e_message.")	
+			sent_e_message.save
+		end
+		return sent_e_message
 	end
 
-	def create_sent_message(e_message, sender)
-		sent_message = SentEMessage.new
-		sent_message.date_sent =  DateTime.now
-		sent_message.e_message = e_message
-		sent_message.sender = sender
-		sent_message.message = 'sent'
-		return sent_message
+	#tested
+	def does_post_call(e_message, sender)
+		Rails.logger.debug("does_post_call -> ")
+		Rails.logger.debug("e_message.url: #{e_message.url}")
+		Rails.logger.debug("e_message.sender_from: #{e_message.sender_from}")
+		Rails.logger.debug("e_message.sender_email: #{e_message.sender_email}")
+		Rails.logger.debug("e_message.message: #{e_message.message}")
+		Rails.logger.debug("e_message.subject: #{e_message.subject}")
+
+		response = RestClient.post e_message.url,
+		  :from => e_message.sender_from,
+		  :to => e_message.sender_email,
+		  :subject => e_message.subject,
+		  :text => e_message.message
+		Rails.logger.debug("does_post_call <- ")
+		return response
 	end
 
+	#tested
 	def create_success_response(sent_message)
 		return Response.new(ConstClass::SUCCESS.values[0], ConstClass::SUCCESS.keys[0], sent_message.id)
 	end
 
+	#tested
 	def create_error_response(e_message)
 		return Response.new(ConstClass::INTERNAL_ERROR.values[0], ConstClass::INTERNAL_ERROR.keys[0], e_message)
 	end	

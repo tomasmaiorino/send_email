@@ -48,6 +48,7 @@ ActiveRecord::Schema.define(version: 20160727115019) do
     t.string   "name",            limit: 255
     t.boolean  "active",                      default: false
     t.string   "sender_class",    limit: 255
+    t.string   "sender_from",     limit: 255
     t.string   "additional_data", limit: 255
     t.datetime "created_at",                                  null: false
     t.datetime "updated_at",                                  null: false

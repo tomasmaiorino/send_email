@@ -1,6 +1,42 @@
 require 'test_helper'
+require 'mocha/test_unit'
+require 'net/http'
 
 class SendEMessageServiceTest < ActionController::TestCase
+
+ def setup    
+    initial_sender_client    
+  end
+
+  def initial_sender_client
+  
+    domain_name = ENV["MAILGUN_DOMAIN_NAME"]
+    key = ENV["MAILGUN_KEY"]
+
+    additional_data = domain_name + '|' + key
+    mailgun = 'Mailgun'
+
+    @mailgun_test_url = "https://api:#{key}@api.mailgun.net/v3/#{domain_name}/messages"
+
+    #setting mailgun initial configuration
+    sender = Sender.find_by(name: mailgun)
+
+    if (sender.nil?)
+      sender = Sender.create([{ :name => 'Mailgun', :active => true, :sender_class => 'Mailgun', :additional_data => additional_data, :sender_from => 'from@'}])
+    end
+
+    client_token = '112211'
+    client = Client.find_by(token: client_token)
+    if (client.nil?)
+      client = Client.create([:token => client_token, :name => 'Test', :active => true, host: 'localhost'])
+    end
+
+    client_sender = ClientSender.find_by(client: client, sender: sender)
+    if (client_sender.nil?)
+      client_sender = ClientSender.create([{client: client.first, sender: sender.first}])
+    end
+  
+  end
 
   def create_e_message
   	e_message = EMessage.new
@@ -13,6 +49,9 @@ class SendEMessageServiceTest < ActionController::TestCase
   	sender.id = 1
   	return sender
   end
+  # => ----------------------
+  # => send_service_message
+  # => ----------------------
 
    test "should return nil" do
     service = SendEMessageService.new
@@ -50,11 +89,65 @@ class SendEMessageServiceTest < ActionController::TestCase
   	e_message.save
   	sender = create_sender
   	sender.save
-  	sent_message = service.create_sent_message(e_message, sender)
+
+    response = ('')
+    response.stubs(:code).returns(200)
+
+  	sent_message = service.create_sent_message(e_message, sender, response, true)
   	assert_not_nil sent_message
   	assert_equal e_message.id, sent_message.e_message.id
   	assert_equal sender.id, sent_message.sender.id
   	assert_not_nil sent_message.date_sent
   end
+
+  test "should does post call" do
+    #mocks
+    e_message = EMessage.new
+    e_message.sender_from = 'tomasmaiorino@gmail.com'
+    e_message.sender_email = 'tomasmaiorino@gmail.com'
+    e_message.message = 'Teste does post call'
+    e_message.url = @mailgun_test_url
+    e_message.subject = 'Teste send email'
+    #call
+    service = SendEMessageService.new
+    response = ('')
+    service.stubs(:does_post_call).returns(response)    
+    response.stubs(:code).returns(200)
+    response = service.does_post_call e_message, nil
+    #checks
+    assert_not_nil response
+    assert_equal 200, response.code
+  end
+
+   test "should throw InvalidURIError error" do  
+    assert_raise (URI::InvalidURIError){ 
+      #mocks
+      e_message = EMessage.new
+      e_message.sender_from = 'tomasmaiorino@gmail.com'
+      e_message.sender_email = 'tomasmaiorino@gmail.com'
+      e_message.message = 'Teste does post call'
+      e_message.url = ''
+      e_message.subject = 'Teste send email'
+      #call
+      service = SendEMessageService.new    
+      response = service.does_post_call e_message, nil   
+  }
+  end 
+
+test "should throw BadRequest error" do
+  assert_raise (RestClient::BadRequest){ 
+    #mocks
+    e_message = EMessage.new
+    e_message.sender_from = 'tomasmaiorino@gmail.com'
+    e_message.sender_email = nil
+    e_message.message = 'Teste does post call'
+    e_message.url = @mailgun_test_url
+    e_message.subject = 'Teste send email'
+    #call
+    service = SendEMessageService.new
+    response = service.does_post_call e_message, nil
+  }
+  end
+
 
 end
