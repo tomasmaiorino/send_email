@@ -53,12 +53,23 @@ class SendEMessageServiceTest < ActionController::TestCase
   # => send_service_message
   # => ----------------------
 
-   test "should return nil" do
+  test "should return nil" do
     service = SendEMessageService.new
     response = service.send_service_message(nil)
     assert_not_nil response
     assert_equal ConstClass::INTERNAL_ERROR.keys[0], response.code
-    assert_equal nil, response.result 
+    assert_equal nil, response.result
+  end
+
+  test "should send nessage" do
+    e_message = EMessage.new
+    e_message.token = '112211'
+    e_message.message = 'Test Message'
+    e_message.sender_email = 'teste@teste.com'
+    e_message.sender_name = 'test email'
+    e_message.subject = 'subject'
+    service = SendEMessageService.new
+    response = service.send_service_message e_message
   end
 
   test "should create error response" do
