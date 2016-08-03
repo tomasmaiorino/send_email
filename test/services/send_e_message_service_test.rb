@@ -65,11 +65,32 @@ class SendEMessageServiceTest < ActionController::TestCase
     e_message = EMessage.new
     e_message.token = '112211'
     e_message.message = 'Test Message'
-    e_message.sender_email = 'teste@teste.com'
+    e_message.sender_email = 'tomasmaiorino@gmail.com'
     e_message.sender_name = 'test email'
     e_message.subject = 'subject'
+    e_message.save
     service = SendEMessageService.new
-    response = service.send_service_message e_message
+    #response = service.send_service_message e_message    
+    #assert_not_nil response
+    #assert_equal 200, response.code
+
+    #temp_sent_message = SentEMessage.find_by(e_message: e_message.id)
+    #assert_not_nil temp_sent_message
+    #assert_equal e_message.id, temp_sent_message.e_message.id
+  end
+
+   test "should throw bad request error sending message" do
+    e_message = EMessage.new
+    e_message.token = '112211'
+    e_message.message = 'Test Message'
+    e_message.sender_email = ''
+    e_message.sender_name = 'test email'
+    e_message.subject = 'subject'
+    e_message.save
+    service = SendEMessageService.new
+    response = service.send_service_message e_message    
+    assert_not_nil response
+    assert_equal 400, response.code    
   end
 
   test "should create error response" do
