@@ -2,10 +2,10 @@ require 'test_helper'
 require 'mocha/test_unit'
 require 'net/http'
 
-class SendEMessageServiceTest < ActionController::TestCase
+class SendEMessageServiceTest < BaseServiceTest
 
  def setup    
-    initial_sender_client    
+    initial_sender_client
   end
 
   def initial_sender_client
@@ -80,17 +80,16 @@ class SendEMessageServiceTest < ActionController::TestCase
   end
 
    test "should throw bad request error sending message" do
-    e_message = EMessage.new
-    e_message.token = '112211'
-    e_message.message = 'Test Message'
-    e_message.sender_email = ''
-    e_message.sender_name = 'test email'
-    e_message.subject = 'subject'
-    e_message.save
-    service = SendEMessageService.new
-    response = service.send_service_message e_message    
-    assert_not_nil response
-    assert_equal 400, response.code    
+    assert_raise (RestClient::BadRequest){ 
+      e_message = EMessage.new
+      e_message.token = '112211'
+      e_message.message = 'Test Message'
+      e_message.sender_email = ''
+      e_message.sender_name = 'test email'
+      e_message.subject = 'subject'
+      e_message.save
+      SendEMessageService.new.send_service_message e_message
+    }
   end
 
   test "should create error response" do
