@@ -17,7 +17,7 @@ class SendEmailControllerTest < ActionController::TestCase
     sender = Sender.find_by(name: mailgun)
 
     if (sender.nil?)
-      sender = Sender.create(:name => 'Mailgun', :active => true, :sender_class => 'Mailgun', :additional_data => additional_data, :sender_from => 'from@')
+      sender = Sender.create(:name => 'Mailgun', :active => true, :sender_class => 'Mailgun', :additional_data => additional_data, :send_to => 'from@')
     end
 
     client_token = '112211'

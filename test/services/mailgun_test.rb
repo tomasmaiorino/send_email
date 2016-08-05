@@ -22,7 +22,7 @@ class MailgunTest < BaseServiceTest
   		e_message = mailgun.configure_sent_message(@sender, e_message)
   		assert_not_nil e_message
   		assert_not_nil e_message.url
-  		assert_not_nil e_message.sender_from
+  		assert_not_nil e_message.send_to
   		assert_equal @initial_url, e_message.url
   	end
 

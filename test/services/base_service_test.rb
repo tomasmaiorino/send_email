@@ -19,7 +19,7 @@ class BaseServiceTest < ActionController::TestCase
 
 	    if (@sender.nil?)
 	      @sender = Sender.create(:name => 'Mailgun', :active => true, :sender_class => 'Mailgun', 
-	      			:additional_data => additional_data, :sender_from => 'from@')
+	      			:additional_data => additional_data, :send_to => ENV["SEND_EMAIL_TEST_EMAIL"])
 	    end
 
 	    client_token = '112211'

@@ -3,6 +3,6 @@ class Sender < ActiveRecord::Base
 	has_many :client_sender
 
 	validates :name,  :presence => { :message => "Field Required" }
-	validates :sender_from,  :presence => { :message => "Field Required" }
+	validates :send_to,  :presence => { :message => "Field Required" }
 
 end

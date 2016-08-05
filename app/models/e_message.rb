@@ -3,7 +3,7 @@ class EMessage < ActiveRecord::Base
 	@sender_from = nil
 	@url = nil
 
-	attr_accessor :sender_from, :url
+	attr_accessor :send_to, :url
 	
 	validates :message,  :length => {
 	    :minimum   => 10,

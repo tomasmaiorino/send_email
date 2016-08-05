@@ -40,14 +40,14 @@ class SendEMessageService
 	def does_post_call(e_message, sender)
 		Rails.logger.debug("does_post_call -> ")
 		Rails.logger.debug("e_message.url: #{e_message.url}")
-		Rails.logger.debug("e_message.sender_from: #{e_message.sender_from}")
+		Rails.logger.debug("e_message.send_to: #{e_message.send_to}")
 		Rails.logger.debug("e_message.sender_email: #{e_message.sender_email}")
 		Rails.logger.debug("e_message.message: #{e_message.message}")
 		Rails.logger.debug("e_message.subject: #{e_message.subject}")
 
 		response = RestClient.post e_message.url,
-		  :from => e_message.sender_from,
-		  :to => e_message.sender_email,
+		  :from => e_message.sender_email,
+		  :to => e_message.send_to,
 		  :subject => e_message.subject,
 		  :text => e_message.message
 		Rails.logger.debug("does_post_call <- ")

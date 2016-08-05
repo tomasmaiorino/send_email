@@ -8,12 +8,13 @@
 if Rails.env.development?
 	additional_data = ENV["MAILGUN_DOMAIN_NAME"] + '|' + ENV["MAILGUN_KEY"]
 	mailgun = 'Mailgun'
+	send_to = ENV['SEND_EMAIL_TEST_EMAIL']
 
 	#setting mailgun initial configuration
 	sender = Sender.find_by(name: mailgun)
 
 	if (sender.nil?)
-		sender = Sender.create(:name => 'Mailgun', :active => true, :sender_class => 'Mailgun', :additional_data => additional_data, :sender_from => 'test@')
+		sender = Sender.create(:name => 'Mailgun', :active => true, :sender_class => 'Mailgun', :additional_data => additional_data, :send_to => send_to)
 	end
 
 	client_token = '112211'

@@ -11,7 +11,7 @@ class SenderTest < ActiveSupport::TestCase
  	assert !sender.valid?
 	assert !sender.save
 
-	sender.sender_from = 'user@contact.com'
+	sender.send_to = 'user@contact.com'
  	assert sender.valid?
 	assert sender.save
  end
