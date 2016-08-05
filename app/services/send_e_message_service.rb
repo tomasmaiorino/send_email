@@ -27,7 +27,6 @@ class SendEMessageService
 		sent_e_message = SentEMessage.new
 		sent_e_message.status = response.code
 		sent_e_message.e_message = e_message
-		sent_e_message.date_sent =  DateTime.now
 		sent_e_message.sender = sender
 		sent_e_message.message = response.code
 		if save

@@ -13,7 +13,7 @@ if Rails.env.development?
 	sender = Sender.find_by(name: mailgun)
 
 	if (sender.nil?)
-		sender = Sender.create(:name => 'Mailgun', :active => true, :sender_class => 'Mailgun', :additional_data => additional_data, :sender_from => 'test')
+		sender = Sender.create(:name => 'Mailgun', :active => true, :sender_class => 'Mailgun', :additional_data => additional_data, :sender_from => 'test@')
 	end
 
 	client_token = '112211'

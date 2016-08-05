@@ -82,7 +82,6 @@ class SendEMessageServiceTest < BaseServiceTest
   	assert_not_nil sent_message
   	assert_equal e_message.id, sent_message.e_message.id
   	assert_equal sender.id, sent_message.sender.id
-  	assert_not_nil sent_message.date_sent
   end
 
   test "should does post call" do

@@ -1,8 +1,8 @@
 class CreateEMessages < ActiveRecord::Migration
   def change
     create_table :e_messages do |t|
-
 	 t.string :message
+     t.string :code
      t.string :subject
      t.string :sender_name
      t.string :sender_email

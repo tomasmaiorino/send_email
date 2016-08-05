@@ -14,24 +14,24 @@ class SendEmailController < BaseApiController
     end
 
 	def send_email
-		
-		if (@json.nil?) 
+  	if (@json.nil?) 
 			return render nothing: true, status: :bad_request
 		end
-
 		Rails.logger.debug "EMessage #{@json.to_s}"
 		message = JSON.parse( @json.to_json, object_class: EMessage)
 		Rails.logger.debug "EMessage #{message}"
 	  if !message.valid?
  			return render json: message.errors.to_json, status: :bad_request
  		end
-    message.is_message_valid = true
  		Rails.logger.debug "[EMessage] -> saving e_message."
- 		message.save()
+    message.is_message_valid = true
+    message.save
  		Rails.logger.debug "[EMessage] <- saving e_message."
 
  		# checking token against host
  		if is_invalid_client(message)
+      message.code = ConstClass::INVALID_CLIENT.keys[0]
+      message.save
  			return render json: Response.new(ConstClass::INVALID_CLIENT.values[0], ConstClass::INVALID_CLIENT.keys[0]), status: :bad_request
  		end
  		# send the email
