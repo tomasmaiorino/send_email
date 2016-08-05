@@ -38,7 +38,7 @@ class BaseServiceTest < ActionController::TestCase
 	  	e_message = EMessage.new
 	    e_message.token = '112211'
 	    e_message.message = 'Test Message'
-	    e_message.sender_email = 'tomasmaiorino@gmail.com'
+    	e_message.sender_email = ENV["SEND_EMAIL_TEST_EMAIL"]
 	    e_message.sender_name = 'test email'
 	    e_message.subject = 'subject'
 	  	if persist

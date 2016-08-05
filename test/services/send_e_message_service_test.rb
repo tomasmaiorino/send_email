@@ -87,8 +87,8 @@ class SendEMessageServiceTest < BaseServiceTest
   test "should does post call" do
     #mocks
     e_message = EMessage.new
-    e_message.sender_from = 'tomasmaiorino@gmail.com'
-    e_message.sender_email = 'tomasmaiorino@gmail.com'
+    e_message.sender_from = ENV["SEND_EMAIL_TEST_EMAIL"]
+    e_message.sender_email = ENV["SEND_EMAIL_TEST_EMAIL"]
     e_message.message = 'Teste does post call'
     e_message.url = @mailgun_test_url
     e_message.subject = 'Teste send email'
@@ -107,8 +107,8 @@ class SendEMessageServiceTest < BaseServiceTest
     assert_raise (URI::InvalidURIError){ 
       #mocks
       e_message = EMessage.new
-      e_message.sender_from = 'tomasmaiorino@gmail.com'
-      e_message.sender_email = 'tomasmaiorino@gmail.com'
+      e_message.sender_from = ENV["SEND_EMAIL_TEST_EMAIL"]
+      e_message.sender_email = ENV["SEND_EMAIL_TEST_EMAIL"]
       e_message.message = 'Teste does post call'
       e_message.url = ''
       e_message.subject = 'Teste send email'
@@ -122,7 +122,7 @@ test "should throw BadRequest error" do
   assert_raise (RestClient::BadRequest){ 
     #mocks
     e_message = EMessage.new
-    e_message.sender_from = 'tomasmaiorino@gmail.com'
+    e_message.sender_from = ENV["SEND_EMAIL_TEST_EMAIL"]
     e_message.sender_email = nil
     e_message.message = 'Teste does post call'
     e_message.url = @mailgun_test_url
