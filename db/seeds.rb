@@ -5,7 +5,7 @@
 #
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
-if Rails.env.test? || Rails.env.development?
+if Rails.env.development?
 	additional_data = ENV["MAILGUN_DOMAIN_NAME"] + '|' + ENV["MAILGUN_KEY"]
 	mailgun = 'Mailgun'
 
@@ -13,18 +13,19 @@ if Rails.env.test? || Rails.env.development?
 	sender = Sender.find_by(name: mailgun)
 
 	if (sender.nil?)
-		sender = Sender.create([{ :name => 'Mailgun', :active => true, :sender_class => 'Mailgun', :additional_data => additional_data}])
+		sender = Sender.create(:name => 'Mailgun', :active => true, :sender_class => 'Mailgun', :additional_data => additional_data, :sender_from => 'test')
 	end
 
 	client_token = '112211'
 	client = Client.find_by(token: client_token)
 	if (client.nil?)
-		client = Client.create([:token => client_token, :name => 'Test', :active => true, host: 'localhost'])
+		client = Client.create(:token => client_token, :name => 'Test', :active => true, host: 'localhost')
 	end
 
 	client_sender = ClientSender.find_by(client: client, sender: sender)
+
 	if (client_sender.nil?)
-		client_sender = ClientSender.create([{client: client, sender: sender}])
+		client_sender = ClientSender.create(client: client, sender: sender)
 	end
 else
 

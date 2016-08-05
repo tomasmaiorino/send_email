@@ -22,13 +22,7 @@ class SendEMessageServiceTest < BaseServiceTest
   end
 
   test "should send nessage" do
-    e_message = EMessage.new
-    e_message.token = '112211'
-    e_message.message = 'Test Message'
-    e_message.sender_email = 'tomasmaiorino@gmail.com'
-    e_message.sender_name = 'test email'
-    e_message.subject = 'subject'
-    e_message.save
+    e_message = create_e_message
     service = SendEMessageService.new
     #response = service.send_service_message e_message    
     #assert_not_nil response

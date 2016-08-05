@@ -15,27 +15,35 @@ class BaseServiceTest < ActionController::TestCase
 	    @mailgun_test_url = "https://api:#{@key}@api.mailgun.net/v3/#{@domain_name}/messages"
 
 	    #setting mailgun initial configuration
-	    @sender = Sender.find_by(name: mailgun)
+	    @sender = Sender.find_by(name: 'Mailgun')
 
 	    if (@sender.nil?)
-	      @sender = Sender.create([{ :name => 'Mailgun', :active => true, :sender_class => 'Mailgun', :additional_data => additional_data, :sender_from => 'from@'}])
+	      @sender = Sender.create(:name => 'Mailgun', :active => true, :sender_class => 'Mailgun', 
+	      			:additional_data => additional_data, :sender_from => 'from@')
 	    end
 
 	    client_token = '112211'
 	    client = Client.find_by(token: client_token)
 	    if (client.nil?)
-	      client = Client.create([:token => client_token, :name => 'Test', :active => true, host: 'localhost'])
+	      client = Client.create(:token => client_token, :name => 'Test', :active => true, host: 'localhost')
 	    end
 
 	    client_sender = ClientSender.find_by(client: client, sender: @sender)
 	    if (client_sender.nil?)
-	      client_sender = ClientSender.create([{client: client.first, sender: @sender.first}])
+	      client_sender = ClientSender.create(client: client, sender: @sender)
 	    end
   	end
 
-	def create_e_message
+	def create_e_message(persist = false)
 	  	e_message = EMessage.new
-	  	e_message.id = 1
+	    e_message.token = '112211'
+	    e_message.message = 'Test Message'
+	    e_message.sender_email = 'tomasmaiorino@gmail.com'
+	    e_message.sender_name = 'test email'
+	    e_message.subject = 'subject'
+	  	if persist
+			e_message.save
+	  	end
 	  	return e_message
   	end 
 
@@ -44,4 +52,7 @@ class BaseServiceTest < ActionController::TestCase
 	  	sender.id = 1
 	  	return sender
   	end
+
+
+
 end

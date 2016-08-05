@@ -22,24 +22,24 @@ class SendEmailController < BaseApiController
 		Rails.logger.debug "EMessage #{@json.to_s}"
 		message = JSON.parse( @json.to_json, object_class: EMessage)
 		Rails.logger.debug "EMessage #{message}"
-		if !message.valid?
-   			return render json: message.errors.to_json, status: :bad_request
-   		end
+	  if !message.valid?
+ 			return render json: message.errors.to_json, status: :bad_request
+ 		end
+    message.is_message_valid = true
+ 		Rails.logger.debug "[EMessage] -> saving e_message."
+ 		message.save()
+ 		Rails.logger.debug "[EMessage] <- saving e_message."
 
-   		Rails.logger.debug "[EMessage] -> saving e_message."
-   		message.save()
-   		Rails.logger.debug "[EMessage] <- saving e_message."
-
-   		# checking token against host
-   		if is_invalid_client(message)
-   			return render json: Response.new(ConstClass::INVALID_CLIENT.values[0], ConstClass::INVALID_CLIENT.keys[0]), status: :bad_request
-   		end
-   		# send the email
-   		Rails.logger.info "[EMessage] -> sending email."
-      send_response = @send_message_service.send_service_message(message)
-      render json:send_response
-      #  return render json: Response.new(ConstClass::SUCCESS.values[0], ConstClass::SUCCESS.keys[0], message.id), status: :ok
-  	end
+ 		# checking token against host
+ 		if is_invalid_client(message)
+ 			return render json: Response.new(ConstClass::INVALID_CLIENT.values[0], ConstClass::INVALID_CLIENT.keys[0]), status: :bad_request
+ 		end
+ 		# send the email
+ 		Rails.logger.info "[EMessage] -> sending email."
+    send_response = @send_message_service.send_service_message(message)
+    render json:send_response
+    #  return render json: Response.new(ConstClass::SUCCESS.values[0], ConstClass::SUCCESS.keys[0], message.id), status: :ok
+ 	end
 
   	private
 
