@@ -3,18 +3,23 @@ require 'json'
 
 class SendEmailController < BaseApiController
 
+  after_action :set_headers 
+
+  skip_before_action :verify_authenticity_token
+
 	def initialize
 		@send_message_service = SendEMessageService.new
 	end
 
 	def handle_unverified_request
-		if request.method == 'POST' && !JSON.parse(request.body.read).has_key?("token")
+		if request.method == 'POST' || request.method == 'OPSTIONS' && !JSON.parse(request.body.read).has_key?("token")
        		raise ActionController::InvalidAuthenticityToken
        	end
     end
 
 	def send_email
-  	if (@json.nil?) 
+  	if (@json.nil?)
+      Rails.logger.debug "Json nil :("
 			return render nothing: true, status: :bad_request
 		end
 		Rails.logger.debug "EMessage #{@json.to_s}"
@@ -41,10 +46,24 @@ class SendEmailController < BaseApiController
     #  return render json: Response.new(ConstClass::SUCCESS.values[0], ConstClass::SUCCESS.keys[0], message.id), status: :ok
  	end
 
-  	private
+  def options
+    set_headers
+    # this will send an empty request to the clien with 200 status code (OK, can proceed)
+    render :text => '', :content_type => 'text/plain'
+  end
 
+  	private
   	def is_invalid_client(e_message)
   		Rails.logger.debug "Client host " << request.host
   		Client.find_by(token: e_message.token, active: true, host: request.host).nil?
   	end
+
+    def set_headers
+      headers['Access-Control-Allow-Origin'] = '*'
+      headers['Access-Control-Expose-Headers'] = 'Etag'
+      headers['Access-Control-Allow-Methods'] = 'GET, POST, PUT, DELETE, PATCH, OPTIONS, HEAD'
+      headers['Access-Control-Allow-Headers'] = '*, x-requested-with, Content-Type, If-Modified-Since, If-None-Match'
+      headers['Access-Control-Max-Age'] = '86400'
+    end
+
 end

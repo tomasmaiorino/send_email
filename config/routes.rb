@@ -53,6 +53,7 @@ Rails.application.routes.draw do
   #     # (app/controllers/admin/products_controller.rb)
   #     resources :products
   #   end
+=begin
   scope '/api' do
     scope '/v1' do
       scope '/sendEmail' do
@@ -60,4 +61,7 @@ Rails.application.routes.draw do
       end
     end
   end
+=end
+  match 'api/v1/sendEmail' => 'send_email#send_email', via: [:post, :options]
+
 end
