@@ -11,7 +11,16 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160727115019) do
+ActiveRecord::Schema.define(version: 20160811022601) do
+
+  create_table "client_hosts", force: :cascade do |t|
+    t.integer  "client_id",  limit: 4
+    t.string   "host",       limit: 255
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
+  end
+
+  add_index "client_hosts", ["client_id"], name: "index_client_hosts_on_client_id", using: :btree
 
   create_table "client_senders", force: :cascade do |t|
     t.integer  "client_id",  limit: 4

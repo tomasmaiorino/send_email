@@ -28,6 +28,12 @@ if Rails.env.development?
 	if (client_sender.nil?)
 		client_sender = ClientSender.create(client: client, sender: sender)
 	end
+
+	client_host = ClientHost.find_by(:client => client)
+
+	if(client_host.nil?)
+		client_host = ClientHost.create(:client => client, host: 'localhost')
+	end
 else
 
 end

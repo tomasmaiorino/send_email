@@ -1,3 +1,4 @@
+require 'json'
 class BaseApiController < ApplicationController
 
 	before_filter :parse_request#, :authenticate_user_from_token!
@@ -19,9 +20,11 @@ class BaseApiController < ApplicationController
 =end
   def parse_request
     Rails.logger.debug "Request body #{request.body.read}"
-    Rails.logger.debug "Parsing json ->"
-    if !request.body.read.nil? && !request.body.read.empty?
-      @json = JSON.parse(request.body.read)
+    Rails.logger.debug "Request params #{request.params}"
+    if !request.params.except(:action, :controller).nil? && !request.params.except(:action, :controller).empty?
+      Rails.logger.debug "Valid request->"
+      Rails.logger.debug "Parsing json ->"
+      @json = request.params.except(:action, :controller).to_json
     end
   end
 end

@@ -23,7 +23,7 @@ class SendEmailController < BaseApiController
 			return render nothing: true, status: :bad_request
 		end
 		Rails.logger.debug "EMessage #{@json.to_s}"
-		message = JSON.parse( @json.to_json, object_class: EMessage)
+		message = JSON.parse( @json, object_class: EMessage)
 		Rails.logger.debug "EMessage #{message}"
 	  if !message.valid?
  			return render json: message.errors.to_json, status: :bad_request
@@ -46,13 +46,7 @@ class SendEmailController < BaseApiController
     #  return render json: Response.new(ConstClass::SUCCESS.values[0], ConstClass::SUCCESS.keys[0], message.id), status: :ok
  	end
 
-  def options
-    set_headers
-    # this will send an empty request to the clien with 200 status code (OK, can proceed)
-    render :text => '', :content_type => 'text/plain'
-  end
-
-  	private
+ 	private
   	def is_invalid_client(e_message)
   		Rails.logger.debug "Client host " << request.host
   		Client.find_by(token: e_message.token, active: true, host: request.host).nil?

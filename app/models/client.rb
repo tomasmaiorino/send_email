@@ -3,6 +3,4 @@ class Client < ActiveRecord::Base
 
 	validates :name,  :presence => { :message => "Field Required" }
 	validates :token,  :presence => { :message => "Field Required" }
-	validates :host,  :presence => { :message => "Field Required" }
-
 end

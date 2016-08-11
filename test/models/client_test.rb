@@ -2,7 +2,7 @@ require 'test_helper'
 
 class ClientTest < ActiveSupport::TestCase
 
-test "shoul_save_client" do
+test "should_save_client" do
  	client = Client.new
  	assert !client.save
 	assert !client.valid?
