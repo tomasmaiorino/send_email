@@ -12,10 +12,6 @@ test "should_save_client" do
 	assert !client.save
 
 	client.token = '1233211123'
- 	assert !client.valid?
-	assert !client.save
-
-	client.host = 'localhost'
  	assert client.valid?
 	assert client.save
  end

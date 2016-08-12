@@ -34,7 +34,7 @@ class SendEmailController < BaseApiController
  		Rails.logger.debug "[EMessage] <- saving e_message."
 
  		# checking token against host
- 		if is_invalid_client(message)
+ 		if is_invalid_client(message, request.host)
       message.code = ConstClass::INVALID_CLIENT.keys[0]
       message.save
  			return render json: Response.new(ConstClass::INVALID_CLIENT.values[0], ConstClass::INVALID_CLIENT.keys[0]), status: :bad_request
@@ -46,18 +46,23 @@ class SendEmailController < BaseApiController
     #  return render json: Response.new(ConstClass::SUCCESS.values[0], ConstClass::SUCCESS.keys[0], message.id), status: :ok
  	end
 
- 	private
-  	def is_invalid_client(e_message)
-  		Rails.logger.debug "Client host " << request.host
-  		Client.find_by(token: e_message.token, active: true, host: request.host).nil?
-  	end
+  
+ 	def is_invalid_client(e_message, host)
+  	Rails.logger.debug "Client host " << host
+    client = Client.find_by(token: e_message.token, active: true)
+    return true if client.nil?
+    client_host = ClientHost.find_by(:client => client, :host => host)
+    return client_host.nil?
+ 	end
 
-    def set_headers
-      headers['Access-Control-Allow-Origin'] = '*'
-      headers['Access-Control-Expose-Headers'] = 'Etag'
-      headers['Access-Control-Allow-Methods'] = 'GET, POST, PUT, DELETE, PATCH, OPTIONS, HEAD'
-      headers['Access-Control-Allow-Headers'] = '*, x-requested-with, Content-Type, If-Modified-Since, If-None-Match'
-      headers['Access-Control-Max-Age'] = '86400'
-    end
+  private
+  
+  def set_headers
+    headers['Access-Control-Allow-Origin'] = '*'
+    headers['Access-Control-Expose-Headers'] = 'Etag'
+    headers['Access-Control-Allow-Methods'] = 'GET, POST, PUT, DELETE, PATCH, OPTIONS, HEAD'
+    headers['Access-Control-Allow-Headers'] = '*, x-requested-with, Content-Type, If-Modified-Since, If-None-Match'
+    headers['Access-Control-Max-Age'] = '86400'
+  end
 
 end
