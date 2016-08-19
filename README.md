@@ -15,7 +15,7 @@ This application is running under Ruby on Rails.
 
 ## Additional Technologies
 
-**Database:** Msyql for store both the messages received and sent. For now, the database needs to created manually. We're using send_email_test for tests, send_email_development for development and send_email for production. The data into send_email_test will be deleted after the tests. The seed.rb it is responsible the initial load in both development and production environment.
+**Database:** Msyql for store both the messages received and sent. The data into send_email_test will be deleted after the tests. The seed.rb it is responsible the initial load in both development and production environment.
 
 **Tests:** The tests are defined as use case of the Junit. The tests of rest services have: Spring Web MVC for mock of the web infrastructure; JsonPath e hamcrest are used for access and assertions in the Json content. The tests have been made available in the structure: src/test/java.
 
@@ -36,20 +36,36 @@ This application is running under Ruby on Rails.
   2 - MAILGUN_KEY (mailgun key)
   3 - SEND_EMAIL_TEST_EMAIL (email to received all you tests emails :) )
 
+5 - For production environment you need to create more 6 environments variables:
+  1 - MAILGUN_DOMAIN_NAME_PRODUCTION (mailgun production domain name)
+  2 - MAILGUN_KEY_PRODUCTION (mailgun key production key)
+  3 - SEND_EMAIL_PRODUCTION (email to received all emails :) )
+  4 - CLIENT_HOSTS (client hosts)
+  5 - CLIENT_TOKEN (client token)
+  6 - CLIENT_NAME (client name)
+
 ###### After download the fonts, to install the necessary gems run this follow command:
 $ bundle install
 
-###### After run rake command to configure the database:
-$ rake db:reset
+###### After run rake create command to configure the database:
+$ rake db:create:all
+
+###### After run rake migrate command to configure the database for all environments
+rake db:migrate RAILS_ENV="test"
+rake db:migrate RAILS_ENV="development"
+rake db:migrate RAILS_ENV="production"
 
 ###### After rake test in order to test your applications:
 $ rake test
 
+###### After rake test in order to test your development environment you need to run the initial load:
+rake db:seed
+
 ###### To start the application run:
 $ rails server
 
-###### To test the create order service, tpye it:
-curl -i -H "Content-Type:application/json" -H "Accept:application/json" -X POST http://localhost:8080/order -d "{\"commerceItems\": [{\"sku\": {\"id\": 3},\"quantity\": 12,\"unitValue\": 12}],\"status\": \"SUBMITTED\",\"paymentStatus\": \"CREATED\",\"totalAmount\": 26}
+###### For production environment you need to run the seed command for that environment
+rake db:seed RAILS_ENV="production"
 
-##### To update the order, type it:
-curl -i -H "Content-Type:application/json" -H "Accept:application/json" -X PUT -d "{\"id\":4, \"commerceItems\": [{\"sku\": {\"id\": 1},\"quantity\": 12,\"unitValue\": 12}],\"status\": \"APPROVED\",\"paymentStatus\": \"CREATED\",\"totalAmount\": 21}" http://localhost:8080/order
+###### To test the send email service, type it:
+curl -i -X POST http://localhost:3000/api/v1/sendEmail -d {\"message\": \"Precido de uma mensagm que funcionaoriu iua pawoirua pworiuaw pero pweoirua wperoiauwe \",\"subject\": \"Site não funciona\",\"sender_email\":\"teste@teste.com\",\"sender_name\": \"tomas maiorino\",\"token\": \"112211\"}

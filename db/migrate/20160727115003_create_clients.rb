@@ -4,7 +4,6 @@ class CreateClients < ActiveRecord::Migration
       t.string :name
       t.string :token
       t.boolean :active, :default => false
-	  t.string :host
       t.timestamps null: false
     end
   end

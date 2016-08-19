@@ -36,7 +36,6 @@ ActiveRecord::Schema.define(version: 20160811022601) do
     t.string   "name",       limit: 255
     t.string   "token",      limit: 255
     t.boolean  "active",                 default: false
-    t.string   "host",       limit: 255
     t.datetime "created_at",                             null: false
     t.datetime "updated_at",                             null: false
   end
