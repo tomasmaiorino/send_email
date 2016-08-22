@@ -4,11 +4,11 @@ require 'net/http'
 
 class SendEMessageServiceTest < BaseServiceTest
 
-  def setup    
+  def setup
     initial_sender_client
   end
 
-  
+
   # => ----------------------
   # => send_service_message
   # => ----------------------
@@ -24,7 +24,7 @@ class SendEMessageServiceTest < BaseServiceTest
   test "should send nessage" do
     e_message = create_e_message
     service = SendEMessageService.new
-    #response = service.send_service_message e_message    
+    #response = service.send_service_message e_message
     #assert_not_nil response
     #assert_equal 200, response.code
 
@@ -34,7 +34,7 @@ class SendEMessageServiceTest < BaseServiceTest
   end
 
    test "should throw bad request error sending message" do
-    assert_raise (RestClient::BadRequest){ 
+    assert_raise (RestClient::BadRequest){
       e_message = EMessage.new
       e_message.token = '112211'
       e_message.message = 'Test Message'
@@ -95,7 +95,7 @@ class SendEMessageServiceTest < BaseServiceTest
     #call
     service = SendEMessageService.new
     response = ('')
-    service.stubs(:does_post_call).returns(response)    
+    service.stubs(:does_post_call).returns(response)
     response.stubs(:code).returns(200)
     response = service.does_post_call e_message, nil
     #checks
@@ -103,8 +103,8 @@ class SendEMessageServiceTest < BaseServiceTest
     assert_equal 200, response.code
   end
 
-   test "should throw InvalidURIError error" do  
-    assert_raise (URI::InvalidURIError){ 
+   test "should throw InvalidURIError error" do
+    assert_raise (URI::InvalidURIError){
       #mocks
       e_message = EMessage.new
       e_message.send_to = ENV["SEND_EMAIL_TEST_EMAIL"]
@@ -113,13 +113,13 @@ class SendEMessageServiceTest < BaseServiceTest
       e_message.url = ''
       e_message.subject = 'Teste send email'
       #call
-      service = SendEMessageService.new    
-      response = service.does_post_call e_message, nil   
+      service = SendEMessageService.new
+      response = service.does_post_call e_message, nil
   }
-  end 
+  end
 
 test "should throw BadRequest error" do
-  assert_raise (RestClient::BadRequest){ 
+  assert_raise (RestClient::BadRequest){
     #mocks
     e_message = EMessage.new
     e_message.send_to = ENV["SEND_EMAIL_TEST_EMAIL"]

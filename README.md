@@ -15,9 +15,9 @@ This application is running under Ruby on Rails.
 
 ## Additional Technologies
 
-**Database:** Msyql for store both the messages received and sent. The data into send_email_test will be deleted after the tests. The seed.rb it is responsible the initial load in both development and production environment.
+**Database:** Msyql for store both sent and received messages. The data into send_email_test will be deleted after the tests. The seed.rb it is responsible the initial load in both development and production environments.
 
-**Tests:** The tests are defined as use case of the Junit. The tests of rest services have: Spring Web MVC for mock of the web infrastructure; JsonPath e hamcrest are used for access and assertions in the Json content. The tests have been made available in the structure: src/test/java.
+**Tests:** The tests are defined as use case of the rails tests api. The tests have been made available default structure for rails: tests/.
 
 ## Considerations
 
@@ -31,7 +31,7 @@ This application is running under Ruby on Rails.
 
 3 - Mysql.
 
-4 - To create 3 environment variables:
+4 - Create 3 environment variables:
   1 - MAILGUN_DOMAIN_NAME (mailgun domain name)
   2 - MAILGUN_KEY (mailgun key)
   3 - SEND_EMAIL_TEST_EMAIL (email to received all you tests emails :) )
@@ -50,12 +50,12 @@ $ bundle install
 ###### After run rake create command to configure the database:
 $ rake db:create:all
 
-###### After run rake migrate command to configure the database for all environments
+###### After run rake migrate command to configure the database for all environments:
 rake db:migrate RAILS_ENV="test"
 rake db:migrate RAILS_ENV="development"
 rake db:migrate RAILS_ENV="production"
 
-###### After rake test in order to test your applications:
+###### After rake test in order to test your applications all the initial configurations:
 $ rake test
 
 ###### After rake test in order to test your development environment you need to run the initial load:
@@ -68,4 +68,4 @@ $ rails server
 rake db:seed RAILS_ENV="production"
 
 ###### To test the send email service, type it:
-curl -i -X POST http://localhost:3000/api/v1/sendEmail -d {\"message\": \"Precido de uma mensagm que funcionaoriu iua pawoirua pworiuaw pero pweoirua wperoiauwe \",\"subject\": \"Site não funciona\",\"sender_email\":\"teste@teste.com\",\"sender_name\": \"tomas maiorino\",\"token\": \"112211\"}
+curl -i -X POST http://localhost:3000/api/v1/sendEmail -d {\"message\": \"I'd like to say that I love your web site! \",\"subject\": \"Site não funciona\",\"sender_email\":\"teste@teste.com\",\"sender_name\": \"tomas maiorino\",\"token\": \"112211\"}
