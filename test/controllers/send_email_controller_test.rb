@@ -2,14 +2,14 @@ require 'test_helper'
 
 class SendEmailControllerTest < ActionController::TestCase
 
-  
+
   def setup
     @valid_params = {:token => '112211', :message => 'Test Message', :sender_email => 'teste@teste.com', :sender_name => 'test email', :subject => 'subject'}
     initial_sender_client
   end
 
   def initial_sender_client
-  
+
     additional_data = ENV["MAILGUN_DOMAIN_NAME"] + '|' + ENV["MAILGUN_KEY"]
     mailgun = 'Mailgun'
 
@@ -23,7 +23,7 @@ class SendEmailControllerTest < ActionController::TestCase
     client_token = '112211'
     client = Client.find_by(token: client_token)
     if (client.nil?)
-      client = Client.create(:token => client_token, :name => 'Test', :active => true, host: 'localhost')
+      client = Client.create(:token => client_token, :name => 'Test', :active => true)
     end
 
     client_sender = ClientSender.find_by(client: client, sender: sender)
@@ -45,7 +45,6 @@ class SendEmailControllerTest < ActionController::TestCase
     client.name = 'test'
     client.token = '112211'
     client.active = true
-    client.host = 'localhost'
     return client
   end
 
@@ -79,7 +78,7 @@ class SendEmailControllerTest < ActionController::TestCase
   	assert !message.has_key?("message")
   	assert !message.has_key?("sender_email")
   	assert !message.has_key?("token")
-	
+
   	assert message.has_key?("subject")
   	assert_equal 'Field Required', message["subject"][0]
   	assert message.has_key?("sender_name")

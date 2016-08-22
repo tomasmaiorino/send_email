@@ -5,7 +5,7 @@ require 'net/http'
 class BaseServiceTest < ActionController::TestCase
 
 	def initial_sender_client
-  
+
 	    @domain_name = ENV["MAILGUN_DOMAIN_NAME"]
 	    @key = ENV["MAILGUN_KEY"]
 
@@ -18,20 +18,28 @@ class BaseServiceTest < ActionController::TestCase
 	    @sender = Sender.find_by(name: 'Mailgun')
 
 	    if (@sender.nil?)
-	      @sender = Sender.create(:name => 'Mailgun', :active => true, :sender_class => 'Mailgun', 
+	      @sender = Sender.create(:name => 'Mailgun', :active => true, :sender_class => 'Mailgun',
 	      			:additional_data => additional_data, :send_to => ENV["SEND_EMAIL_TEST_EMAIL"])
 	    end
 
 	    client_token = '112211'
 	    client = Client.find_by(token: client_token)
 	    if (client.nil?)
-	      client = Client.create(:token => client_token, :name => 'Test', :active => true, host: 'localhost')
+	      client = Client.create(:token => client_token, :name => 'Test', :active => true)
 	    end
 
 	    client_sender = ClientSender.find_by(client: client, sender: @sender)
 	    if (client_sender.nil?)
 	      client_sender = ClientSender.create(client: client, sender: @sender)
 	    end
+
+			client_host = ClientHost.find_by(:client => client)
+
+			if(client_host.nil?)
+				client_host = ClientHost.create(:client => client, host: 'localhost')
+				client_host = ClientHost.create(:client => client, host: '127.0.0.1')
+			end
+			
   	end
 
 	def create_e_message(persist = false)
@@ -45,7 +53,7 @@ class BaseServiceTest < ActionController::TestCase
 			e_message.save
 	  	end
 	  	return e_message
-  	end 
+  	end
 
 	def create_sender
 	  	sender = Sender.new
