@@ -64,4 +64,6 @@ Rails.application.routes.draw do
 =end
   match 'api/v1/sendEmail' => 'send_email#send_email', via: [:post, :options]
 
+  get '/', to: redirect('/404.html'), status: 404
+  
 end
