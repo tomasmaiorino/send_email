@@ -46,6 +46,8 @@
 
 		if (sender.nil?)
 			sender = Sender.create(:name => 'Mailgun', :active => true, :sender_class => 'Mailgun', :additional_data => additional_data, :send_to => send_to)
+		else
+			sender = Sender.update(:name => 'Mailgun', :active => true, :sender_class => 'Mailgun', :additional_data => additional_data, :send_to => send_to)
 		end
 
 		client_token = ENV['CLIENT_TOKEN']
