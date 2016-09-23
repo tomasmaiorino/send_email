@@ -81,5 +81,5 @@ Rails.application.configure do
   config.logger = Logger.new(STDOUT)
 
   # Set log level
-  config.log_level = :INFO
+  config.log_level = :DEBUG
 end
