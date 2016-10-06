@@ -65,7 +65,7 @@ class SendEmailControllerTest < ActionController::TestCase
   	assert message.has_key?("sender_email")
   	assert message.has_key?("sender_name")
   	assert message.has_key?("token")
-  	assert_equal 'must have at least 10 words', message["message"][0]
+  	assert_equal 'The message must have at least 10 words', message["message"][0]
 
   	params = {:token => '123', :message => 'Test Message', :sender_email => 'teste@teste.com'}
 
@@ -96,7 +96,7 @@ class SendEmailControllerTest < ActionController::TestCase
   	message = JSON.parse(message)
 
   	assert message.has_key?("message")
-  	assert_equal('must have at most 100 words', message['message'][0])
+  	assert_equal('The message must have at most 200 words', message['message'][0])
   	assert message.has_key?("subject")
   	assert !message.has_key?("sender_email")
   	assert message.has_key?("sender_name")
