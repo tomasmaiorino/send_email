@@ -7,7 +7,7 @@ class EMessage < ActiveRecord::Base
 
 	validates :message,  :length => {
 	    :minimum   => 10,
-	    :maximum   => 200,
+	    :maximum   => 400,
 	    :too_short => "The message must have at least %{count} words",
 	    :too_long  => "The message must have at most %{count} words"
 	  }

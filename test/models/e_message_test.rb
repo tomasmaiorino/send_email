@@ -26,7 +26,8 @@ class EMessageTest < ActiveSupport::TestCase
   	assert !message.valid?
   	assert !message.save
 
-  	message.message = 'test message test test message test test message test test message test test message test test message test test message test test message test test test message test test message test test message test test test message test test message test test message test'
+  	message.message = 'test message test test message test test message test test message test test message test test message test test message test test message test test test message test test message test test message test test test message test test message test test message test test test message test test test message test test message test test message test test test message test test test message test test message ' +
+    'test test message test test test message test test test message test test message test test message test'
 
   	assert !message.valid?
   	assert !message.save
