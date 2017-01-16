@@ -44,4 +44,6 @@ Rails.application.configure do
 
   # Set log level
   config.log_level = :DEBUG
+
+  config.allow_origins = "*"
 end

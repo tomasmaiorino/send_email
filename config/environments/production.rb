@@ -82,4 +82,6 @@ Rails.application.configure do
 
   # Set log level
   config.log_level = :DEBUG
+
+  config.allow_origins = "http://tomasmaiorino.github.io"
 end

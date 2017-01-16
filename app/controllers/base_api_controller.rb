@@ -3,8 +3,18 @@ class BaseApiController < ApplicationController
 
 	before_filter :parse_request#, :authenticate_user_from_token!
 
+	def set_headers
+		allow_origins = Rails.application.config.allow_origins
+		Rails.logger.info "Access-Control-Allow-Origin [#{allow_origins}]"
+		headers['Access-Control-Allow-Origin'] = allow_origins
+    headers['Access-Control-Expose-Headers'] = 'Etag'
+    headers['Access-Control-Allow-Methods'] = 'GET, POST, PUT, DELETE, PATCH, OPTIONS, HEAD'
+    headers['Access-Control-Allow-Headers'] = '*, x-requested-with, Content-Type, If-Modified-Since, If-None-Match'
+    headers['Access-Control-Max-Age'] = '86400'
+  end
+
   private
-=begin    
+=begin
        def authenticate_user_from_token!
          if !@json['api_token']
            render nothing: true, status: :unauthorized

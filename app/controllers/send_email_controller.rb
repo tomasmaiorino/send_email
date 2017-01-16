@@ -3,7 +3,7 @@ require 'json'
 
 class SendEmailController < BaseApiController
 
-  after_action :set_headers 
+  after_action :set_headers
 
   skip_before_action :verify_authenticity_token
 
@@ -18,6 +18,7 @@ class SendEmailController < BaseApiController
     end
 
 	def send_email
+    Rails.logger.debug("Request from host: " + request.host)
   	if (@json.nil?)
       Rails.logger.debug "Json nil :("
 			return render nothing: true, status: :bad_request
@@ -46,7 +47,7 @@ class SendEmailController < BaseApiController
     #  return render json: Response.new(ConstClass::SUCCESS.values[0], ConstClass::SUCCESS.keys[0], message.id), status: :ok
  	end
 
-  
+
  	def is_invalid_client(e_message, host)
   	Rails.logger.debug "Client host " << host
     client = Client.find_by(token: e_message.token, active: true)
@@ -54,15 +55,5 @@ class SendEmailController < BaseApiController
     client_host = ClientHost.find_by(:client => client, :host => host)
     return client_host.nil?
  	end
-
-  private
-  
-  def set_headers
-    headers['Access-Control-Allow-Origin'] = '*'
-    headers['Access-Control-Expose-Headers'] = 'Etag'
-    headers['Access-Control-Allow-Methods'] = 'GET, POST, PUT, DELETE, PATCH, OPTIONS, HEAD'
-    headers['Access-Control-Allow-Headers'] = '*, x-requested-with, Content-Type, If-Modified-Since, If-None-Match'
-    headers['Access-Control-Max-Age'] = '86400'
-  end
 
 end
